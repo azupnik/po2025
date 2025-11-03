@@ -14,11 +14,11 @@ public class Zoo {
     public static void main(String[] args) {
         Animal[] animals = new Animal[100];
         for (int i = 0; i < animals.length; i++) {
-            animals[i] = Animal.getRandomAnimal();
+            animals[i] = Zoo.getRandomAnimal();
         }
     }
 
-    private void getRandomAnimal() {
+    public void getRandomAnimal() {
             int type = random.nextInt(3);
             switch (type) {
                 case 0:
@@ -31,6 +31,6 @@ public class Zoo {
                     animals[i] = new Snake("Waz");
             }
         }
-    }
-
 }
+
+
