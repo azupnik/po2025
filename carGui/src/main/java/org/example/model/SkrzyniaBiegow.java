@@ -1,6 +1,6 @@
-package symulator;
+package org.example.model;
 
-public class SkrzyniaBiegow extends Komponent{
+public class SkrzyniaBiegow extends Komponent {
     int aktualnyBieg;
     int iloscBiegow;
     int aktualnePrzelozenie;

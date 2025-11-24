@@ -1,6 +1,6 @@
-package symulator;
+package org.example.model;
 
-public class Silnik extends Komponent{
+public class Silnik extends Komponent {
     int maxObroty;
     int obroty;
 

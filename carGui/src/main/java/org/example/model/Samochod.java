@@ -1,4 +1,4 @@
-package symulator;
+package org.example.model;
 
 public class Samochod {
     Silnik silnik ;

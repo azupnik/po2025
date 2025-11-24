@@ -1,4 +1,4 @@
-package symulator;
+package org.example.model;
 
 public class Komponent {
     String producent;

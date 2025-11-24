@@ -1,6 +1,6 @@
-package symulator;
+package org.example.model;
 
-public class Sprzeglo extends Komponent{
+public class Sprzeglo extends Komponent {
     boolean stanSprzegla;
 
     public Sprzeglo(String producent, String model, String nazwa, int waga, double cena, boolean stanSprzegla) {
