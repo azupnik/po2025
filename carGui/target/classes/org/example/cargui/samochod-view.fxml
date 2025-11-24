@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.cargui.SamochodController"
+            prefHeight="600.0" prefWidth="900.0">
+
+    <top>
+        <VBox>
+            <MenuBar>
+                <Menu text="Plik"/>
+                <Menu text="Edycja"/>
+            </MenuBar>
+            <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #e0e0e0; -fx-padding: 5 10 5 10;">
+                <Label text="Samochód:"/>
+                <ComboBox fx:id="carCombo" prefWidth="200"/>
+                <Button text="Dodaj nowy" onAction="#onAddCar"/>
+                <Button text="Usuń" onAction="#onRemoveCar"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <left>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefWidth="280">
+            <VBox spacing="10">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <TitledPane text="Samochód" collapsible="true" expanded="true">
+                    <VBox spacing="10">
+                        <GridPane hgap="10" vgap="5">
+                            <Label text="Model" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                            <TextField fx:id="modelField" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+
+                            <Label text="Nr rejestracyjny" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                            <TextField fx:id="regField" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+
+                            <Label text="Waga" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                            <TextField fx:id="weightField" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+
+                            <Label text="Prędkość" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                            <TextField fx:id="speedField" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+                            <columnConstraints>
+                                <ColumnConstraints minWidth="80"/> <ColumnConstraints hgrow="ALWAYS"/>
+                            </columnConstraints>
+                        </GridPane>
+                        <HBox spacing="5">
+                            <Button text="Włącz"/>
+                            <Button text="Wyłącz"/>
+                        </HBox>
+                    </VBox>
+                </TitledPane>
+
+                <TitledPane text="Skrzynia Biegów" collapsible="true" expanded="true">
+                    <VBox spacing="10">
+                        <GridPane hgap="10" vgap="5">
+                            <Label text="Nazwa" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                            <TextField GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+                            <Label text="Cena" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                            <TextField GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+                            <Label text="Bieg" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                            <TextField GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+                        </GridPane>
+                        <HBox spacing="5">
+                            <Button text="Zwiększ bieg"/>
+                            <Button text="Zmniejsz bieg"/>
+                        </HBox>
+                    </VBox>
+                </TitledPane>
+
+                <TitledPane text="Silnik" collapsible="true" expanded="true">
+                    <VBox spacing="10">
+                        <GridPane hgap="10" vgap="5">
+                            <Label text="Obroty" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                            <TextField GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+                        </GridPane>
+                        <HBox spacing="5">
+                            <Button text="Dodaj gazu"/>
+                            <Button text="Ujmij gazu"/>
+                        </HBox>
+                    </VBox>
+                </TitledPane>
+
+                <TitledPane text="Sprzęgło" collapsible="true" expanded="true">
+                    <VBox spacing="10">
+                        <GridPane hgap="10" vgap="5">
+                            <Label text="Stan" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                            <TextField GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+                        </GridPane>
+                        <HBox spacing="5">
+                            <Button text="Naciśnij"/>
+                            <Button text="Zwolnij"/>
+                        </HBox>
+                    </VBox>
+                </TitledPane>
+
+            </VBox>
+        </ScrollPane>
+    </left>
+
+    <center>
+        <Pane style="-fx-background-color: lightgreen;">
+            <Label text="Mapa" textFill="darkgreen" layoutX="10" layoutY="10"/>
+
+            <VBox layoutX="50" layoutY="50" alignment="CENTER">
+                <ImageView fx:id="carImage" fitWidth="80" preserveRatio="true"/>
+                <Label text="Car"/>
+            </VBox>
+        </Pane>
+    </center>
+
+</BorderPane>
