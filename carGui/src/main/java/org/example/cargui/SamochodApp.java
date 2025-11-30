@@ -11,7 +11,6 @@ public class SamochodApp extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        // Ta linijka ładuje plik widoku i automatycznie podpina Twój SamochodController
         FXMLLoader fxmlLoader = new FXMLLoader(SamochodApp.class.getResource("samochod-view.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load(), 900, 600);

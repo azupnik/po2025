@@ -18,11 +18,17 @@ public class Silnik extends Komponent {
         obroty = 0;
     }
 
-    void zwiekszObroty(){
-        obroty +=100;
+    public int getObroty() { return obroty; }
+
+    public void zwiekszObroty() {
+        if (obroty < maxObroty) {
+            obroty += 100;
+        }
     }
 
-    void zmniejszObroty(){
-        obroty -=100;
+    public void zmniejszObroty() {
+        if (obroty > 0) {
+            obroty -= 100;
+        }
     }
 }

@@ -18,7 +18,7 @@
             </MenuBar>
             <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #e0e0e0; -fx-padding: 5 10 5 10;">
                 <Label text="Samochód:"/>
-                <ComboBox fx:id="carCombo" prefWidth="200"/>
+                <ComboBox fx:id="carCombo" prefWidth="200" onAction="#onCarSelect"/>
                 <Button text="Dodaj nowy" onAction="#onAddCar"/>
                 <Button text="Usuń" onAction="#onRemoveCar"/>
             </HBox>
@@ -36,23 +36,24 @@
                     <VBox spacing="10">
                         <GridPane hgap="10" vgap="5">
                             <Label text="Model" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                            <TextField fx:id="modelField" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+                            <TextField fx:id="modelField" editable="false" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
 
                             <Label text="Nr rejestracyjny" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                            <TextField fx:id="regField" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+                            <TextField fx:id="regField" editable="false" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
 
                             <Label text="Waga" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                            <TextField fx:id="weightField" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+                            <TextField fx:id="weightField" editable="false" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
 
                             <Label text="Prędkość" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                            <TextField fx:id="speedField" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+                            <TextField fx:id="speedField" editable="false" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+
                             <columnConstraints>
                                 <ColumnConstraints minWidth="80"/> <ColumnConstraints hgrow="ALWAYS"/>
                             </columnConstraints>
                         </GridPane>
                         <HBox spacing="5">
-                            <Button text="Włącz"/>
-                            <Button text="Wyłącz"/>
+                            <Button text="Włącz" onAction="#onStartCar"/>
+                            <Button text="Wyłącz" onAction="#onStopCar"/>
                         </HBox>
                     </VBox>
                 </TitledPane>
@@ -61,15 +62,17 @@
                     <VBox spacing="10">
                         <GridPane hgap="10" vgap="5">
                             <Label text="Nazwa" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                            <TextField GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+                            <TextField fx:id="gearboxNameField" editable="false" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+
                             <Label text="Cena" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                            <TextField GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+                            <TextField fx:id="gearboxPriceField" editable="false" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+
                             <Label text="Bieg" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                            <TextField GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+                            <TextField fx:id="gearField" editable="false" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
                         </GridPane>
                         <HBox spacing="5">
-                            <Button text="Zwiększ bieg"/>
-                            <Button text="Zmniejsz bieg"/>
+                            <Button text="Zwiększ bieg" onAction="#onGearUp"/>
+                            <Button text="Zmniejsz bieg" onAction="#onGearDown"/>
                         </HBox>
                     </VBox>
                 </TitledPane>
@@ -78,11 +81,11 @@
                     <VBox spacing="10">
                         <GridPane hgap="10" vgap="5">
                             <Label text="Obroty" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                            <TextField GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+                            <TextField fx:id="rpmField" editable="false" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
                         </GridPane>
                         <HBox spacing="5">
-                            <Button text="Dodaj gazu"/>
-                            <Button text="Ujmij gazu"/>
+                            <Button text="Dodaj gazu" onAction="#onGasAdd"/>
+                            <Button text="Ujmij gazu" onAction="#onGasReduce"/>
                         </HBox>
                     </VBox>
                 </TitledPane>
@@ -91,11 +94,11 @@
                     <VBox spacing="10">
                         <GridPane hgap="10" vgap="5">
                             <Label text="Stan" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                            <TextField GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+                            <TextField fx:id="clutchStateField" editable="false" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
                         </GridPane>
                         <HBox spacing="5">
-                            <Button text="Naciśnij"/>
-                            <Button text="Zwolnij"/>
+                            <Button text="Naciśnij" onAction="#onClutchPress"/>
+                            <Button text="Zwolnij" onAction="#onClutchRelease"/>
                         </HBox>
                     </VBox>
                 </TitledPane>
