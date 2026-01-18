@@ -112,7 +112,7 @@
             <Label text="Mapa" textFill="darkgreen" layoutX="10" layoutY="10"/>
 
             <VBox layoutX="50" layoutY="50" alignment="CENTER">
-                <ImageView fx:id="carImage" fitWidth="80" preserveRatio="true"/>
+                <ImageView fx:id="carImageView" fitWidth="80" preserveRatio="true"/>
                 <Label text="Car"/>
             </VBox>
         </Pane>
