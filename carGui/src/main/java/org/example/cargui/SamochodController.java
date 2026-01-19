@@ -13,14 +13,17 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.example.model.Samochod;
 import org.example.model.Silnik;
 import org.example.model.SkrzyniaBiegow;
 import org.example.model.Sprzeglo;
+import org.example.model.Listener;
+import org.example.model.Pozycja;
 
 
-public class SamochodController {
+public class SamochodController implements Listener{
 
     private static SamochodController instance;
 
@@ -39,6 +42,7 @@ public class SamochodController {
     @FXML private TextField gearField;
     @FXML private TextField rpmField;
     @FXML private TextField clutchStateField;
+    @FXML private Pane mapa;
 
 
     private Samochod samochod;
@@ -54,28 +58,20 @@ public class SamochodController {
         carImageView.setTranslateX(0);
         carImageView.setTranslateY(0);
 
-
-
-        Silnik s1 = new Silnik("Honda", "VTEC", "2.0", 150, 5000, 7000, 0);
-        SkrzyniaBiegow gb1 = new SkrzyniaBiegow("ZF", "Manual", "6-speed", 50, 2000, 0, 6, 1);
-        Samochod auto1 = new Samochod(s1, gb1);
-        auto1.setModel("Honda Civic");
-
-        Silnik s2 = new Silnik("Fiat", "MultiJet", "1.3", 120, 3000, 5000, 0);
-        SkrzyniaBiegow gb2 = new SkrzyniaBiegow("Fiat", "Manual", "5-speed", 40, 1000, 0, 5, 1);
-        Samochod auto2 = new Samochod(s2, gb2);
-        auto2.setModel("Fiat Punto");
-
-        garaz.add(auto1);
-        garaz.add(auto2);
-
+        mapa.setOnMouseClicked(event -> {
+            if (samochod != null) {
+                samochod.jedzDo(new Pozycja(event.getX(), event.getY()));
+            }
+        });
         carCombo.getItems().clear();
         for (Samochod s : garaz) {
             carCombo.getItems().add(s.getModel());
         }
-
         carCombo.getSelectionModel().selectFirst();
-        this.samochod = auto1;
+
+        if (this.samochod != null) {
+            this.samochod.addListener(this);
+        }
         refresh();
     }
 
@@ -94,6 +90,12 @@ public class SamochodController {
 
             Silnik silnik = samochod.getSilnik();
             rpmField.setText(String.valueOf(silnik.getObroty()));
+            carImageView.setTranslateX(samochod.getPozycja().getX());
+            carImageView.setTranslateY(samochod.getPozycja().getY());
+
+            boolean stan = samochod.getSkrzynia().getSprzeglo().getStanSprzegla();
+            clutchStateField.setText(stan? "Wciśnięte": "Zwolnione");
+
         }
     }
 
@@ -135,9 +137,9 @@ public class SamochodController {
     @FXML
     protected void onGasAdd() {
         System.out.println("Dodaję gazu");
-        // Tu usunęliśmy komentarz //
         if (samochod != null && samochod.getSilnik() != null) {
             samochod.getSilnik().zwiekszObroty();
+            przeliczPredkosc();
         }
         refresh();
     }
@@ -147,19 +149,24 @@ public class SamochodController {
         System.out.println("Ujmuję gazu");
         if (samochod != null && samochod.getSilnik() != null) {
             samochod.getSilnik().zmniejszObroty();
+            przeliczPredkosc();
         }
         refresh();
     }
 
     @FXML
     protected void onClutchPress() {
-        System.out.println("Sprzęgło wciśnięte");
+        if (samochod != null && samochod.getSkrzynia() != null && samochod.getSkrzynia().getSprzeglo() != null) {
+            samochod.getSkrzynia().getSprzeglo().wcisnij();
+        System.out.println("Sprzęgło wciśnięte");}
         refresh();
     }
 
     @FXML
     protected void onClutchRelease() {
-        System.out.println("Sprzęgło zwolnione");
+        if (samochod != null && samochod.getSkrzynia() != null && samochod.getSkrzynia().getSprzeglo() != null) {
+            samochod.getSkrzynia().getSprzeglo().zwolnij();
+        System.out.println("Sprzęgło zwolnione");}
         refresh();
     }
 
@@ -181,7 +188,7 @@ public class SamochodController {
     protected void onRemoveCar() {
         if (samochod != null) {
             System.out.println("Usuwam auto: " + samochod.getModel());
-
+            samochod.removeListener(this);
             garaz.remove(samochod);
 
             carCombo.getItems().remove(samochod.getModel());
@@ -192,9 +199,19 @@ public class SamochodController {
             } else {
                 samochod = null;
                 carCombo.getSelectionModel().clearSelection();
+                modelField.clear();
+                regField.clear();
+                weightField.clear();
+                speedField.clear();
+                gearboxNameField.clear();
+                gearboxPriceField.clear();
+                gearField.clear();
+                rpmField.clear();
+                clutchStateField.clear();
                 refresh();
             }
         }
+        refresh();
     }
 
     @FXML
@@ -202,17 +219,23 @@ public class SamochodController {
         int index = carCombo.getSelectionModel().getSelectedIndex();
 
         if (index >= 0 && index < garaz.size()) {
+            if (this.samochod != null) {
+                this.samochod.removeListener(this);
+            }
             this.samochod = garaz.get(index);
-            System.out.println("Wybrano auto: " + this.samochod.getModel());
 
-            // Odświeżamy widok, żeby pokazał dane nowego auta
+            this.samochod.addListener(this);
+
+
+            System.out.println("Wybrano auto: " + this.samochod.getModel());
             refresh();
         }
     }
     public static void addCarToList(String model, String registration, double weight, int speed) {
         if (instance != null) {
-            Silnik silnik = new Silnik("Standard", "Benzyna", "1.6", 100, 0, 6000, 0);
-            SkrzyniaBiegow skrzynia = new SkrzyniaBiegow("Standard", "Manual", "5b", 0, 0, 0, 5, 1);
+           Sprzeglo sprzeglo = new Sprzeglo("LuK","Model","Sprzęgło",15,450.0,false);
+            Silnik silnik = new Silnik("Standard", "Benzyna", "1.6", 100, 450, 6000, 0);
+            SkrzyniaBiegow skrzynia = new SkrzyniaBiegow("Standard", "Manual", "5b", 100, 450, 0, 5, 1, sprzeglo);
 
             Samochod noweAuto = new Samochod(silnik, skrzynia);
             noweAuto.setModel(model);
@@ -220,11 +243,30 @@ public class SamochodController {
             noweAuto.setWaga(weight);
             noweAuto.setPredkosc(speed);
 
+
             instance.garaz.add(noweAuto);
             instance.carCombo.getItems().add(noweAuto.getModel());
             instance.carCombo.getSelectionModel().selectLast();
             instance.onCarSelect();
         }
+
     }
 
+    @Override
+    public void update() {
+        javafx.application.Platform.runLater(() -> refresh());
+    }
+
+    private void przeliczPredkosc() {
+        if (samochod != null && samochod.getSilnik() != null && samochod.getSkrzynia() != null) {
+            int obroty = samochod.getSilnik().getObroty();
+
+            if (samochod.getSkrzynia().getAktBieg() == 0) {
+                samochod.setPredkosc(0);
+            } else {
+                int nowaPredkosc = (int) (obroty * 0.02);
+                samochod.setPredkosc(nowaPredkosc);
+            }
+        }
+    }
 }

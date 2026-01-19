@@ -108,13 +108,10 @@
     </left>
 
     <center>
-        <Pane style="-fx-background-color: lightgreen;">
-            <Label text="Mapa" textFill="darkgreen" layoutX="10" layoutY="10"/>
-
-            <VBox layoutX="50" layoutY="50" alignment="CENTER">
-                <ImageView fx:id="carImageView" fitWidth="80" preserveRatio="true"/>
-                <Label text="Car"/>
-            </VBox>
+        <Pane fx:id="mapa" prefHeight="400.0" prefWidth="600.0" style="-fx-border-color: black; -fx-background-color: #eee;">
+            <children>
+                <ImageView fx:id="carImageView" fitHeight="30.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+            </children>
         </Pane>
     </center>
 

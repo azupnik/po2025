@@ -7,7 +7,6 @@ import javafx.stage.Stage;
 
 public class DodajSamochodController {
 
-    // Pola powiązane z FXML (muszą mieć takie same fx:id jak w pliku .fxml)
     @FXML
     private TextField modelTextField;
 
@@ -28,23 +27,35 @@ public class DodajSamochodController {
 
     @FXML
     private void onConfirmButton() {
-        String model = modelTextField.getText();
-        String registration = registrationTextField.getText();
-        double weight;
-        int speed;
+        String model = modelTextField.getText().trim();
+        String registration = registrationTextField.getText().trim();
+        String weightText = weightTextField.getText().trim();
+        String speedText = speedTextField.getText().trim();
 
-        try {
-            weight = Double.parseDouble(weightTextField.getText());
-            speed = Integer.parseInt(speedTextField.getText());
-        } catch (NumberFormatException e) {
-            System.out.println("Niepoprawne dane (waga lub prędkość). Spróbuj ponownie.");
+        if (model.isEmpty() || registration.isEmpty() || weightText.isEmpty() || speedText.isEmpty()) {
+            pokazBlad("Wszystkie pola muszą być wypełnione!");
             return;
         }
 
-        SamochodController.addCarToList(model, registration, weight, speed);
+        try {
+            double weight = Double.parseDouble(weightText);
+            int speed = Integer.parseInt(speedText);
 
-        // Zamknięcie okna po poprawnym dodaniu
-        closeWindow();
+            if (weight <= 0) {
+                pokazBlad("Waga musi być większa od zera!");
+                return;
+            }
+            if (speed < 0) {
+                pokazBlad("Prędkość nie może być ujemna!");
+                return;
+            }
+
+            SamochodController.addCarToList(model, registration, weight, speed);
+            ((javafx.stage.Stage) modelTextField.getScene().getWindow()).close();
+
+        } catch (NumberFormatException e) {
+            pokazBlad("Błędna waga lub prędkość! Wpisz tylko cyfry (użyj kropki dla ułamków).");
+        }
     }
 
     @FXML
@@ -52,10 +63,15 @@ public class DodajSamochodController {
         closeWindow();
     }
 
-    // Metoda pomocnicza do zamykania okna (Stage)
     private void closeWindow() {
-        // Pobieramy Stage (okno) z dowolnego elementu, np. przycisku confirmButton
         Stage stage = (Stage) confirmButton.getScene().getWindow();
         stage.close();
+    }
+    private void pokazBlad(String komunikat) {
+        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+        alert.setTitle("Błąd danych");
+        alert.setHeaderText("Nie można dodać samochodu");
+        alert.setContentText(komunikat);
+        alert.showAndWait();
     }
 }

@@ -1,29 +1,28 @@
 package org.example.model;
 
-public class Samochod {
+public class Samochod extends Thread{
     private String model;
     private String nrRejestracyjny;
-
-    // ZMIANA 1: Waga jako double (zgodnie z formularzem)
     private double waga;
-
     private int predkoscMax;
     private int aktualnaPredkosc;
     private Silnik silnik;
     private SkrzyniaBiegow skrzynia;
+    private Pozycja pozycja = new Pozycja(0, 0);
+    private Pozycja cel;
+    private java.util.List<Listener> listeners = new java.util.ArrayList<>();
 
     public Samochod(Silnik silnik, SkrzyniaBiegow skrzynia) {
         this.silnik = silnik;
         this.skrzynia = skrzynia;
-        // Domyślne wartości
         this.model = "Testowy Model";
         this.nrRejestracyjny = "KR 12345";
         this.waga = 1200.0;
         this.predkoscMax = 220;
         this.aktualnaPredkosc = 0;
+        setDaemon(true);
+        start();
     }
-
-    // --- Gettery i Settery ---
 
     public String getModel() {
         return model;
@@ -41,7 +40,6 @@ public class Samochod {
         this.nrRejestracyjny = nrRejestracyjny;
     }
 
-    // ZMIANA 2: Gettery i Settery dla wagi jako double
     public double getWaga() {
         return waga;
     }
@@ -66,12 +64,11 @@ public class Samochod {
         this.aktualnaPredkosc = aktualnaPredkosc;
     }
 
-    // ZMIANA 3: Dodatkowa metoda, aby kontroler (samochod.setPredkosc) nie zgłaszał błędu
     public void setPredkosc(int predkosc) {
         this.aktualnaPredkosc = predkosc;
+        notifyListeners();
     }
 
-    // ZMIANA 4: Metoda getPredkosc() (używana w refresh() kontrolera)
     public int getPredkosc() {
         return aktualnaPredkosc;
     }
@@ -92,8 +89,6 @@ public class Samochod {
         this.skrzynia = skrzynia;
     }
 
-    // --- Metody logiczne ---
-
     public void wlacz() {
         if (silnik != null) silnik.uruchom();
     }
@@ -106,5 +101,52 @@ public class Samochod {
     @Override
     public String toString() {
         return model;
+    }
+
+    public void jedzDo(Pozycja cel) {
+        this.cel = cel;
+    }
+
+    public void addListener(Listener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeListener(Listener listener) {
+        listeners.remove(listener);
+    }
+
+    private void notifyListeners() {
+        for (Listener listener : listeners) {
+            listener.update();
+        }
+    }
+
+    public Pozycja getPozycja() { return pozycja; }
+
+    // Logika wątku (jazda)
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                boolean biegWbity = (skrzynia != null && skrzynia.getAktBieg() != 0);
+                if (cel != null && getPredkosc() > 0 && biegWbity)  {
+                    double dx = cel.getX() - pozycja.getX();
+                    double dy = cel.getY() - pozycja.getY();
+                    double dist = Math.sqrt(dx*dx + dy*dy);
+                    double step = getPredkosc() * 0.1;
+
+                    if (dist > step) {
+                        pozycja.setX(pozycja.getX() + (step * dx / dist));
+                        pozycja.setY(pozycja.getY() + (step * dy / dist));
+                    } else {
+                        pozycja.setX(cel.getX());
+                        pozycja.setY(cel.getY());
+                        cel = null;
+                    }
+                    notifyListeners();
+                }
+                Thread.sleep(100);
+            } catch (InterruptedException e) { e.printStackTrace(); }
+        }
     }
 }

@@ -3,6 +3,7 @@ package org.example.model;
 public class Silnik extends Komponent {
     int maxObroty;
     int obroty;
+    private boolean uruchomiony;
 
     public Silnik(String producent, String model, String nazwa, int waga, double cena,int maxObroty, int obroty) {
         super(producent, model, nazwa, waga, cena);
@@ -11,24 +12,32 @@ public class Silnik extends Komponent {
     }
 
     void uruchom(){
+        uruchomiony = true;
         obroty = 800;
+        System.out.println("Silnik włączony (obroty: " + obroty + ")");
     }
 
     void zatrzymaj(){
+        uruchomiony = false;
         obroty = 0;
+        System.out.println("Silnik włączony (obroty: " + obroty + ")");
     }
 
-    public int getObroty() { return obroty; }
-
     public void zwiekszObroty() {
-        if (obroty < maxObroty) {
+        if (uruchomiony && obroty < maxObroty) {
             obroty += 100;
         }
     }
 
     public void zmniejszObroty() {
-        if (obroty > 0) {
+        if (uruchomiony && obroty > 0) {
             obroty -= 100;
         }
     }
+
+    public int getMaxObroty() {
+        return maxObroty;
+    }
+
+    public int getObroty() { return obroty; }
 }
