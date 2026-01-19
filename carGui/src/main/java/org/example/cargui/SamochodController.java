@@ -117,7 +117,6 @@ public class SamochodController implements Listener{
     @FXML
     protected void onGearUp() {
         System.out.println("Bieg w górę");
-        // Usunęliśmy // przed wywołaniem
         if (samochod != null && samochod.getSkrzynia() != null) {
             samochod.getSkrzynia().zwiekszBieg();
         }
@@ -127,7 +126,6 @@ public class SamochodController implements Listener{
     @FXML
     protected void onGearDown() {
         System.out.println("Bieg w dół");
-        // Usunęliśmy // przed wywołaniem
         if (samochod != null && samochod.getSkrzynia() != null) {
             samochod.getSkrzynia().zmniejszBieg();
         }
@@ -208,6 +206,8 @@ public class SamochodController implements Listener{
                 gearField.clear();
                 rpmField.clear();
                 clutchStateField.clear();
+                carImageView.setTranslateX(0);
+                carImageView.setTranslateY(0);
                 refresh();
             }
         }

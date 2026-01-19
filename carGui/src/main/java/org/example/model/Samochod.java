@@ -123,7 +123,6 @@ public class Samochod extends Thread{
 
     public Pozycja getPozycja() { return pozycja; }
 
-    // Logika wątku (jazda)
     @Override
     public void run() {
         while (true) {
